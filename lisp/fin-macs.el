@@ -54,7 +54,7 @@
       (dolist (p need-to-install)
 	(package-install p)))))
 
-(add-to-list 'load-path "~fin/.emacs.d/lisp/")
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 
 
 
