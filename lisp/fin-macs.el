@@ -28,6 +28,7 @@
                          json-snatcher
                          multiple-cursors
                          neotree
+                         seq
                          smooth-scrolling
                          sublime-themes
                          tss
