@@ -27,6 +27,7 @@ then
 fi
 
 echo "Installing FinMacs desktop file"
+mkdir -p ~/.local/share/applications/
 cp finmacs.desktop ~/.local/share/applications/
 
 echo
