@@ -15,33 +15,19 @@
 ;; INSTALL REQUIRED PACKAGES ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar local-packages '(
-                         ac-js2
                          ace-jump-mode
                          auto-complete
                          auto-complete-c-headers
-                         csharp-mode
                          epc
                          epl
-                         fill-column-indicator
-                         flymake-css
-                         flymake-cursor
-                         flymake-less
-                         flymake-python-pyflakes
-                         flymake-sass
-                         flymake-vala
                          glsl-mode
                          iedit
                          jedi
-                         jedi-direx
-                         js2-mode
-                         js2-refactor
                          json-mode
                          json-reformat
                          json-snatcher
                          multiple-cursors
                          neotree
-                         omnisharp
-                         projectile
                          smooth-scrolling
                          sublime-themes
                          tss
@@ -52,11 +38,14 @@
                          wgrep
                          yasnippet
                          ))
+
 (defun uninstalled-packages (packages)
   (delq nil
 	(mapcar (lambda (p)
 		  (if (package-installed-p p nil) nil p))
 		packages)))
+
+;; install packages from var local-packages that are not installed on current system
 (let ((need-to-install
        (uninstalled-packages local-packages)))
   (when need-to-install
@@ -73,7 +62,6 @@
 ;;;;;;;;;;;;;;;;;;;
 ;; INIT PACKAGES ;;
 ;;;;;;;;;;;;;;;;;;;
-(setq exec-path (append exec-path '("/home/fin/Entwicklung/bin")))
 ;; start auto-complete with emacs
 (require 'auto-complete)
 ;; do default config for auto-complete
@@ -82,17 +70,12 @@
 ;; setup wgrep
 (require 'wgrep)
 (setq wgrep-change-readonly-file t)
-;; configure csharp auto-completion
-(require 'omnisharp)
-;; case converter
-(load "change_case.el")
 ;; HTCPCP protocol
 (load "coffee.el")
+;; Fix a bug in emacs' current css indentation logic
 (load "css-mode.el")
 (require 'smooth-scrolling)
 
-;;(setq initial-frame-alist '((width . 151) (height . 74)))
-;;(setq default-frame-alist '((width . 149) (height . 72)))
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
 (setq auto-window-vscroll nil)
@@ -101,58 +84,19 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq-default indent-tabs-mode nil) ;; all tabs are spaces
 
-(defun omnisharp:get-projects-solution-file ()
-  (interactive)
-  ;; get directory containing current file
-  (defvar sharp-project-dir
-    (file-name-directory
-     (expand-file-name
-      (buffer-file-name (current-buffer)))))
-
-  ;; get the parent directory of a given one
-  (defun parent-directory (dir)
-    (unless (equal "/" dir)
-      (file-name-directory (directory-file-name dir))))
-
-  ;; while (!(sharp-project-dir+"*.sln").exists?)
-  (while (not (file-expand-wildcards (concat sharp-project-dir "*.sln")))
-    (setq sharp-project-dir (parent-directory sharp-project-dir)))
-
-  ;; return found solution file path
-  (car (file-expand-wildcards (concat sharp-project-dir "*.sln"))))
-
-(defun omnisharp:setup ()
-  (local-set-key [C-tab] 'omnisharp-auto-complete)
-  (setq omnisharp-server-executable-path
-	"/home/fin/Entwicklung/bin/OmniSharp/OmniSharp.exe")
-  (omnisharp-start-omnisharp-server (omnisharp:get-projects-solution-file))
-  (auto-complete-mode)
-  (flycheck-mode)
-  (omnisharp-mode)
-  (setq c-basic-offset 4)
-  (c-set-offset 'substatement-open 0))
-
-(add-hook 'csharp-mode-hook 'omnisharp:setup)
+(setq frame-title-format "FinMacs - %b")
 
 ;; show up auto-complete menu immediately
 (setq ac-show-menu-immediately-on-auto-complete t)
 ;; start yasnippet with emacs
 (require 'yasnippet)
 (yas-global-mode 1)
-;; setup projectile
-(require 'projectile)
-(projectile-global-mode)
 ;; setup jedi
 (require 'jedi)
 ;; install jedi dependencies
-;(jedi:install-server)
+(jedi:install-server)
 ;; hook up to auto-complete
 (add-to-list 'ac-sources 'ac-source-jedi-direct)
-
-(add-to-list 'load-path "~fin/.emacs.d/ajc-java-complete/")
-(require 'ajc-java-complete-config)
-(add-hook 'java-mode-hook 'ajc-java-complete-mode)
-(add-hook 'find-file-hook 'ajc-4-jsp-find-file-hook)
 
 ;; ### setup python ide ###
 ;; setup virtualenv
@@ -204,7 +148,6 @@
 	 		    (file-name-nondirectory buffer-file-name)))))
 
 ;; set theme
-(add-to-list 'custom-theme-load-path "~fin/.emacs.d/themes")
 (load-theme 'twilight-bright t)
 
 ;; web-mode
@@ -221,12 +164,12 @@
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
   (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-css-indent-offset 4)
+  (setq web-mode-code-indent-offset 4)
   (setq web-mode-enable-auto-pairing t)
   (setq web-mode-enable-css-colorization t)
 )
-(add-hook 'web-mode-hook  'my-web-mode-hook)
+(add-hook 'web-mode-hook 'my-web-mode-hook)
 
 (setq web-mode-ac-sources-alist
   '(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
@@ -262,6 +205,8 @@
 (tss-config-default)
 
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; SET EMACS CUSTOMIZATION VARIABLES ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -276,15 +221,11 @@
     ("c1390663960169cd92f58aad44ba3253227d8f715c026438303c09b9fb66cdfb" "4d99f0431c0882b1fdd483f30a1853e852cf448730b12ddf087a42102c08dbc0" "ce79400f46bd76bebeba655465f9eadf60c477bd671cbcd091fe871d58002a88" "e26780280b5248eb9b2d02a237d9941956fc94972443b0f7aeec12b5c15db9f3" "53c542b560d232436e14619d058f81434d6bbcdc42e00a4db53d2667d841702e" "9bcb8ee9ea34ec21272bb6a2044016902ad18646bd09fdd65abae1264d258d89" "bf648fd77561aae6722f3d53965a9eb29b08658ed045207fe32ffed90433eb52" "1989847d22966b1403bab8c674354b4a2adf6e03e0ffebe097a6bd8a32be1e19" "33c5a452a4095f7e4f6746b66f322ef6da0e770b76c0ed98a438e76c497040bb" "7d4d00a2c2a4bba551fcab9bfd9186abe5bfa986080947c2b99ef0b4081cb2a6" "c7359bd375132044fe993562dfa736ae79efc620f68bab36bd686430c980df1c" "90b5269aefee2c5f4029a6a039fb53803725af6f5c96036dee5dc029ff4dff60" "0ebe0307942b6e159ab794f90a074935a18c3c688b526a2035d14db1214cf69c" "a774c5551bc56d7a9c362dca4d73a374582caedb110c201a09b410c0ebbb5e70" default)))
  '(display-battery-mode t)
  '(display-time-mode t)
- '(ede-project-directories
-   (quote
-    ("/home/fin/Entwicklung/cpp/src/cpp14_u11_codevorgabe")))
  '(electric-indent-mode t)
  '(electric-layout-mode t)
  '(fill-column 120)
  '(inhibit-startup-screen t)
  '(js-flat-functions t)
- '(js2-highlight-level 3)
  '(markdown-command "kramdown")
  '(menu-bar-mode nil)
  '(neo-hidden-regexp-list
@@ -295,15 +236,13 @@
  '(nxml-slash-auto-complete-flag t)
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
- '(scala-indent:step 4)
  '(semantic-c-dependency-system-include-path
    (quote
     ("/usr/include" "/usr/lib/gcc/x86_64-pc-linux-gnu/4.7.3/include/g++-v4")))
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil)
- '(uniquify-buffer-name-style (quote forward) nil (uniquify))
- '(vera-basic-offset 4))
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -377,24 +316,10 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ADD A GLOBAL RULER TO INDICATE THE 80 CO ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'fill-column-indicator)
-(add-hook 'prog-mode-hook '(lambda () (fci-mode)))
-(add-hook 'text-mode-hook '(lambda () (fci-mode)))
-(setq fci-rule-width 2)
-(setq fci-rule-color "#eee")
-
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; HIGHLIGHT CURRENT LINE ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-hl-line-mode)
-;;(set-face-background 'hl-line "white")
-;;(set-face-foreground 'hl-line "black")
 
 
 
@@ -416,6 +341,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CUSTOM KEYBINDINGS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
+(global-set-key (kbd "C-X C-D") 'neotree-dir)
 (global-set-key (kbd "S-<f1>") 'comment-region)
 (global-set-key (kbd "S-<f2>") 'uncomment-region)
 (global-set-key (kbd "<f9>") 'comment-box)
@@ -457,96 +383,3 @@
 (eval-after-load "ace-jump-mode"
   '(ace-jump-mode-enable-mark-sync))
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
-
-
-
-
-
-;;;;;;;;;;;;;;;;;;;
-;; SET C++ STYLE ;;
-;;;;;;;;;;;;;;;;;;;
-(c-add-style "fin"
-	     '("gnu"
-	       (c-basic-offset . 4)	; Guessed value
-	       (c-offsets-alist
-		(block-close . 0)	; Guessed value
-		(defun-block-intro . +)	; Guessed value
-		(defun-close . 0)	; Guessed value
-		(defun-open . 0)	; Guessed value
-		(else-clause . 0)	; Guessed value
-		(statement . 0)		; Guessed value
-		(statement-block-intro . +) ; Guessed value
-		(substatement . +)	; Guessed value
-		(substatement-open . 0)	; Guessed value
-		(topmost-intro . 0)	; Guessed value
-		(access-label . -)
-		(annotation-top-cont . 0)
-		(annotation-var-cont . +)
-		(arglist-close . c-lineup-close-paren)
-		(arglist-cont c-lineup-gcc-asm-reg 0)
-		(arglist-cont-nonempty . c-lineup-arglist)
-		(arglist-intro . +)
-		(block-open . 0)
-		(brace-entry-open . 0)
-		(brace-list-close . 0)
-		(brace-list-entry . 0)
-		(brace-list-intro . +)
-		(brace-list-open . 0)
-		(c . c-lineup-C-comments)
-		(case-label . 0)
-		(catch-clause . 0)
-		(class-close . 0)
-		(class-open . 0)
-		(comment-intro . c-lineup-comment)
-		(composition-close . 0)
-		(composition-open . 0)
-		(cpp-define-intro c-lineup-cpp-define +)
-		(cpp-macro . -1000)
-		(cpp-macro-cont . +)
-		(do-while-closure . 0)
-		(extern-lang-close . 0)
-		(extern-lang-open . 0)
-		(friend . 0)
-		(func-decl-cont . +)
-		(inclass . +)
-		(incomposition . +)
-		(inexpr-class . +)
-		(inexpr-statement . +)
-		(inextern-lang . +)
-		(inher-cont . c-lineup-multi-inher)
-		(inher-intro . +)
-		(inlambda . c-lineup-inexpr-block)
-		(inline-close . 0)
-		(inline-open . +)
-		(inmodule . +)
-		(innamespace . +)
-		(knr-argdecl . 0)
-		(knr-argdecl-intro . +)
-		(label . 2)
-		(lambda-intro-cont . +)
-		(member-init-cont . c-lineup-multi-inher)
-		(member-init-intro . +)
-		(module-close . 0)
-		(module-open . 0)
-		(namespace-close . 0)
-		(namespace-open . 0)
-		(objc-method-args-cont . c-lineup-ObjC-method-args)
-		(objc-method-call-cont c-lineup-ObjC-method-call-colons c-lineup-ObjC-method-call +)
-		(objc-method-intro .
-				   [0])
-		(statement-case-intro . +)
-		(statement-case-open . 0)
-		(statement-cont . +)
-		(stream-op . c-lineup-streamop)
-		(string . -1000)
-		(substatement-label . 2)
-		(template-args-cont c-lineup-template-args +)
-		(topmost-intro-cont . c-lineup-topmost-intro-cont))))
-
-(defun my:c++-mode-hook ()
-  (c-set-style "fin")
-  (auto-fill-mode)
-  (c-toggle-auto-hungry-state 1))
-
-(add-hook 'c++-mode-hook 'my:c++-mode-hook)
-(put 'upcase-region 'disabled nil)

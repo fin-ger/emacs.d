@@ -1,0 +1,3 @@
+[submodule "typescript-tools"]
+	path = typescript-tools
+	url = git://github.com/clausreinke/typescript-tools.git
