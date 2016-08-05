@@ -17,7 +17,8 @@ echo "Installing typescript-tools locally"
 BOOTSTRAP=";;;;;;;;;;;;;;;;;;;
 ;; SETUP FINMACS ;;
 ;;;;;;;;;;;;;;;;;;;
-(load-file \"~/.emacs.d/lisp/fin-macs.el\")
+(setq custom-file \"~/.emacs.d/lisp/fin-macs.el\")
+(load custom-file)
 "
 
 if ! grep -i "finmacs" ~/.emacs > /dev/null 2>&1

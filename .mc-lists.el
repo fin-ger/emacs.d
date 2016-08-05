@@ -15,6 +15,7 @@
         markdown-exdent-or-delete
         overwrite-mode
         tss--insert-with-ac-trigger-command
+        typescript-insert-and-indent
         yas-expand
         ))
 
