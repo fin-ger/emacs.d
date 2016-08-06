@@ -312,6 +312,22 @@
 
 
 
+;;;;;;;;;;;;;;;;;;;;;
+;; NEOTREE SORTING ;;
+;;;;;;;;;;;;;;;;;;;;;
+(defadvice neo-buffer--get-nodes
+    (after neo-buffer--get-nodes-new-sorter activate)
+  (setq ad-return-value
+        (let ((nodes ad-return-value)
+              (comparator (lambda (s1 s2) (string< (downcase s1)
+                                                   (downcase s2)))))
+          (apply 'cons (mapcar (lambda (x) (sort (apply x (list nodes))
+                                                 comparator))
+                               '(car cdr))))))
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ENABLE C-x w h AND C-x w r ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
