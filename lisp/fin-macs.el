@@ -26,6 +26,7 @@
                          json-mode
                          json-reformat
                          json-snatcher
+                         less-css-mode
                          multiple-cursors
                          neotree
                          seq
@@ -227,6 +228,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-term-color-vector
+   [unspecified "#FFFFFF" "#d15120" "#5f9411" "#d2ad00" "#6b82a7" "#a66bab" "#6b82a7" "#505050"])
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
@@ -235,6 +238,7 @@
  '(display-time-mode t)
  '(electric-indent-mode t)
  '(electric-layout-mode t)
+ '(fci-rule-character-color "#d9d9d9")
  '(fill-column 120)
  '(inhibit-startup-screen t)
  '(js-flat-functions t)
@@ -246,6 +250,9 @@
  '(neo-show-hidden-files nil)
  '(neo-theme (quote arrow))
  '(nxml-slash-auto-complete-flag t)
+ '(package-selected-packages
+   (quote
+    (yaml-mode yasnippet wgrep web-mode undo-tree typescript-mode twilight-bright-theme tss sublime-themes smooth-scrolling seq neotree multiple-cursors jedi iedit glsl-mode epl auto-complete-c-headers ace-jump-mode)))
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
  '(semantic-c-dependency-system-include-path

@@ -34,7 +34,7 @@ are included.")
    `(cursor ((,class (:background "#656565"))))
    ;; Highlighting faces
    `(fringe ((,class (:background "#303030"))))
-   `(highlight ((,class (:background "#454545"))))
+   `(highlight ((,class (:background "#333333"))))
    `(region ((,class (:background "#444444"))))
    `(secondary-selection ((,class (:background "#333366" :foreground "#f6f3e8"))))
    `(isearch ((,class (:background "#343434" :foreground "#857b6f"))))
