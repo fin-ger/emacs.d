@@ -18,8 +18,11 @@
                          ace-jump-mode
                          auto-complete
                          auto-complete-c-headers
+                         cargo
+                         company
                          epc
                          epl
+                         flycheck-rust
                          glsl-mode
                          iedit
                          jedi
@@ -29,6 +32,8 @@
                          less-css-mode
                          multiple-cursors
                          neotree
+                         racer
+                         rust-mode
                          seq
                          smooth-scrolling
                          sublime-themes
@@ -217,6 +222,24 @@
 ;; Do setting recommemded configuration
 (tss-config-default)
 
+;; rust configuration
+(add-hook 'rust-mode-hook 'cargo-minor-mode)
+(add-hook 'rust-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-c <tab>") #'rust-format-buffer)))
+(defun indent-buffer ()
+  "Indent current buffer according to major mode."
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+(setq racer-cmd "~/.cargo/bin/racer") ;; Rustup binaries PATH
+(setq racer-rust-src-path "~/.rust/src") ;; Rust source code PATH
+
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+
 
 
 
@@ -252,7 +275,7 @@
  '(nxml-slash-auto-complete-flag t)
  '(package-selected-packages
    (quote
-    (yaml-mode yasnippet wgrep web-mode undo-tree typescript-mode twilight-bright-theme tss sublime-themes smooth-scrolling seq neotree multiple-cursors jedi iedit glsl-mode epl auto-complete-c-headers ace-jump-mode)))
+    (markdown-mode markdown-mode+ markdown-preview-eww markdown-preview-mode markdown-toc markdownfmt yaml-mode yasnippet wgrep web-mode undo-tree typescript-mode twilight-bright-theme tss sublime-themes smooth-scrolling seq neotree multiple-cursors jedi iedit glsl-mode epl auto-complete-c-headers ace-jump-mode)))
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
  '(semantic-c-dependency-system-include-path

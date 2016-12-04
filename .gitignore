@@ -8,4 +8,5 @@ ede-projects.el
 projectile-bookmarks.eld
 session.*
 *.elc
+__pycache__
 *~
