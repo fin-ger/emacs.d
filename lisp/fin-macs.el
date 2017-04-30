@@ -37,6 +37,8 @@
                          seq
                          smooth-scrolling
                          sublime-themes
+                         toml
+                         toml-mode
                          tss
                          twilight-bright-theme
                          typescript-mode
@@ -239,6 +241,18 @@
 (add-hook 'racer-mode-hook #'eldoc-mode)
 (add-hook 'racer-mode-hook #'company-mode)
 (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+
+;; visual-line-mode for text buffers
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+
+;; add hunspell to ispell instead of aspell
+(when (executable-find "hunspell")
+  (setq ispell-program-name "hunspell")
+  (setq ispell-really-hunspell t)
+  (setq ispell-dictionary "en_US"))
+
+;; enable flyspell for all text modes
+(add-hook 'text-mode-hook 'flyspell-mode)
 
 
 
