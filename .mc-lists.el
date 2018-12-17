@@ -12,6 +12,7 @@
         end-of-visual-line
         indent-for-tab-command
         kill-region
+        kill-visual-line
         markdown-exdent-or-delete
         overwrite-mode
         tss--insert-with-ac-trigger-command
@@ -25,6 +26,7 @@
         c-electric-colon
         c-electric-paren
         c-electric-pound
+        delete-horizontal-space
         js2-mode-show-node
         mouse-appearance-menu
         mouse-set-region

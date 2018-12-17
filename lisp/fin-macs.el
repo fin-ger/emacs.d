@@ -20,10 +20,18 @@
                          auto-complete-c-headers
                          cargo
                          company
+                         dockerfile-mode
+                         editorconfig
+                         editorconfig-charset-extras
+                         editorconfig-custom-majormode
+                         editorconfig-domain-specific
+                         elixir-mode
                          epc
                          epl
                          flycheck-rust
                          glsl-mode
+                         go-autocomplete
+                         go-mode
                          iedit
                          jedi
                          json-mode
@@ -71,6 +79,15 @@
 ;;;;;;;;;;;;;;;;;;;
 ;; INIT PACKAGES ;;
 ;;;;;;;;;;;;;;;;;;;
+;; configure editorconfig
+(require 'editorconfig)
+(editorconfig-mode 1)
+(add-hook 'editorconfig-custom-hooks
+          'editorconfig-charset-extras)
+(add-hook 'editorconfig-custom-hooks
+          'editorconfig-custom-majormode)
+(add-hook 'editorconfig-custom-hooks
+          'editorconfig-domain-specific)
 ;; start auto-complete with emacs
 (require 'auto-complete)
 ;; do default config for auto-complete
@@ -92,6 +109,7 @@
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq-default indent-tabs-mode nil) ;; all tabs are spaces
+(setq visible-bell t)
 
 (setq frame-title-format "FinMacs - %b")
 
@@ -180,6 +198,7 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
 
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
@@ -254,6 +273,18 @@
 ;; enable flyspell for all text modes
 (add-hook 'text-mode-hook 'flyspell-mode)
 
+;; go setup
+(defun auto-complete-for-go ()
+  (auto-complete-mode 1))
+(add-hook 'go-mode-hook 'auto-complete-for-go)
+(with-eval-after-load 'go-mode
+  (require 'go-autocomplete))
+
+(add-hook 'json-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq js-indent-level 2)))
+
 
 
 
@@ -274,11 +305,12 @@
  '(display-battery-mode t)
  '(display-time-mode t)
  '(electric-indent-mode t)
- '(electric-layout-mode t)
+; '(electric-layout-mode t)
  '(fci-rule-character-color "#d9d9d9")
  '(fill-column 120)
  '(inhibit-startup-screen t)
  '(js-flat-functions t)
+ '(json-reformat:indent-width 2)
  '(markdown-command "kramdown")
  '(menu-bar-mode nil)
  '(neo-hidden-regexp-list
@@ -286,10 +318,11 @@
     ("\\.pyc$" "~$" "^#.*#$" "\\.elc$" "__.*cache.*" "\\.git$")))
  '(neo-show-hidden-files nil)
  '(neo-theme (quote arrow))
+ '(neo-window-fixed-size nil)
  '(nxml-slash-auto-complete-flag t)
  '(package-selected-packages
    (quote
-    (markdown-mode markdown-mode+ markdown-preview-eww markdown-preview-mode markdown-toc markdownfmt yaml-mode yasnippet wgrep web-mode undo-tree typescript-mode twilight-bright-theme tss sublime-themes smooth-scrolling seq neotree multiple-cursors jedi iedit glsl-mode epl auto-complete-c-headers ace-jump-mode)))
+    (jsx-mode select-script-mode vue-mode elm-mode markdown-mode markdown-mode+ markdown-preview-eww markdown-preview-mode markdown-toc markdownfmt yaml-mode yasnippet wgrep web-mode undo-tree typescript-mode twilight-bright-theme tss sublime-themes smooth-scrolling seq neotree multiple-cursors jedi iedit glsl-mode epl auto-complete-c-headers ace-jump-mode)))
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
  '(semantic-c-dependency-system-include-path
@@ -298,7 +331,8 @@
  '(show-paren-mode t)
  '(size-indication-mode t)
  '(tool-bar-mode nil)
- '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify))
+ '(vhdl-basic-offset 4))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -359,6 +393,7 @@
 ;;;;;;;;;;;;;;;;;;;;;
 ;; NEOTREE SORTING ;;
 ;;;;;;;;;;;;;;;;;;;;;
+(setq neo-window-width 30)
 (defadvice neo-buffer--get-nodes
     (after neo-buffer--get-nodes-new-sorter activate)
   (setq ad-return-value
