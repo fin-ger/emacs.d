@@ -448,6 +448,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;; CUSTOM KEYBINDINGS ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;
+(global-set-key [mouse-6] (lambda () (interactive)))
+(global-set-key [mouse-7] (lambda () (interactive)))
 (global-set-key (kbd "C-X C-D") 'neotree-dir)
 (global-set-key (kbd "S-<f1>") 'comment-region)
 (global-set-key (kbd "S-<f2>") 'uncomment-region)
